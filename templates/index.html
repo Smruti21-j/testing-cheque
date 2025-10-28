@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bank Verifier | Cheque Signature Verification</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e9f1ff, #f9fbff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      width: 430px;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0d47a1;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: 600;
+      color: #333;
+      text-align: left;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #f9fafc;
+      transition: border 0.2s;
+    }
+
+    input[type="file"]:hover {
+      border-color: #007bff;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #f8fafc;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+    }
+
+    .success {
+      color: #0b8a00;
+    }
+
+    .error {
+      color: #e60000;
+    }
+
+    img {
+      width: 200px;
+      margin-top: 10px;
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Cheque Signature Verification</h1>
+
+    <form id="verifyForm">
+      <label>Cheque Image</label>
+      <input type="file" id="cheque" name="cheque" accept="image/*" required></input>
+
+      <label>Reference Signature</label>
+      <input type="file" id="reference" name="reference" accept="image/*" required></input>
+
+      <button type="submit">Verify Signature</button>
+    </form>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <footer> 2025  AI-Powered Security System</footer>
+  </div>
+
+  <script>
+    document.getElementById("verifyForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const cheque = document.getElementById("cheque").files[0];
+      const reference = document.getElementById("reference").files[0];
+      const formData = new FormData();
+      formData.append("file1", cheque);
+      formData.append("file2", reference);
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.style.display = "block";
+      resultDiv.innerHTML = "⏳ Checking signatures...";
+
+      try {
+        const res = await fetch("/verify-signatures", { method: "POST", body: formData });
+        const data = await res.json();
+
+        if (data.result.includes("Match")) {
+          resultDiv.className = "result success";
+        } else {
+          resultDiv.className = "result error";
+        }
+
+        resultDiv.innerHTML = `
+          <h3>${data.result}</h3>
+          <p>Confidence: <strong>${data.confidence}%</strong></p>
+          <p>Checked at: ${new Date().toISOString()}</p>
+        `;
+      } catch (error) {
+        resultDiv.className = "result error";
+        resultDiv.innerHTML = "❌ Failed to connect to server";
+      }
+    });
+  </script>
+</body>
+</html>
