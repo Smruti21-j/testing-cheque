@@ -1,0 +1,61 @@
+{
+  "info": {
+    "_postman_id": "fa91a3bb-3a73-4cb2-8d4e-d0a7a561db41",
+    "name": "Cheque Signature Verifier",
+    "description": "Offline cheque signature verification API for bank dashboard — upload two images (cheque and reference signature) to verify match & confidence score.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Check Server Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5012/",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5012",
+          "path": [""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify Signatures",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file1",
+              "type": "file",
+              "src": "C:\\Users\\Smruti\\Downloads\\ChequeSignature\\cheque1.jpg"
+            },
+            {
+              "key": "file2",
+              "type": "file",
+              "src": "C:\\Users\\Smruti\\Downloads\\ChequeSignature\\signature_ref.jpg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5012/verify-signatures",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5012",
+          "path": ["verify-signatures"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
